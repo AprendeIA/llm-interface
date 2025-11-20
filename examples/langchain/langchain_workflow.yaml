@@ -1,0 +1,63 @@
+# Example LangChain Workflow Configuration
+# This file demonstrates the workflow configuration format
+
+name: "document_analysis_pipeline"
+description: "Multi-step document analysis workflow with multiple providers"
+
+# Default provider if not specified in nodes
+default_provider: "openai"
+
+# Workflow nodes
+nodes:
+  - name: "input_processing"
+    type: "prompt"
+    provider: "openai"
+    prompt_template: "Extract key information from: {document}"
+    metadata:
+      temperature: 0.3
+      max_tokens: 500
+
+  - name: "entity_extraction"
+    type: "chain"
+    provider: "openai"
+    prompt_template: "Extract entities from: {text}"
+    metadata:
+      temperature: 0.1
+
+  - name: "sentiment_analysis"
+    type: "chain"
+    provider: "anthropic"
+    metadata:
+      temperature: 0.5
+
+  - name: "summary_generation"
+    type: "prompt"
+    provider: "openai"
+    prompt_template: "Create concise summary: {content}"
+    metadata:
+      temperature: 0.7
+      max_tokens: 200
+
+  - name: "quality_check"
+    type: "tool"
+    provider: "openai"
+    metadata:
+      threshold: 0.8
+
+# Edges define workflow connections
+edges:
+  - ["input_processing", "entity_extraction"]
+  - ["entity_extraction", "sentiment_analysis"]
+  - ["sentiment_analysis", "summary_generation"]
+  - ["summary_generation", "quality_check"]
+
+# Additional workflow metadata
+metadata:
+  version: "1.0"
+  author: "LLM Interface Team"
+  tags:
+    - "document-processing"
+    - "nlp"
+    - "multi-provider"
+  timeout: 300
+  retry_count: 3

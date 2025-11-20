@@ -1,0 +1,44 @@
+# Example Configuration for OpenAI Only
+# This configuration uses only OpenAI providers with different models
+
+providers:
+  # Primary GPT-4 provider for complex tasks
+  gpt4:
+    provider: "openai"
+    model_name: "gpt-4"
+    api_key: "${OPENAI_API_KEY}"
+    temperature: 0.7
+    max_tokens: 2000
+  
+  # GPT-3.5 Turbo for faster, cost-effective tasks
+  gpt35:
+    provider: "openai"
+    model_name: "gpt-3.5-turbo"
+    api_key: "${OPENAI_API_KEY}"
+    temperature: 0.8
+    max_tokens: 1500
+  
+  # GPT-4 with conservative settings for factual tasks
+  gpt4_conservative:
+    provider: "openai"
+    model_name: "gpt-4"
+    api_key: "${OPENAI_API_KEY}"
+    temperature: 0.2
+    max_tokens: 1000
+  
+  # GPT-3.5 with creative settings for brainstorming
+  gpt35_creative:
+    provider: "openai"
+    model_name: "gpt-3.5-turbo"
+    api_key: "${OPENAI_API_KEY}"
+    temperature: 1.2
+    max_tokens: 2000
+
+# Usage Instructions:
+# 1. Set your OpenAI API key: export OPENAI_API_KEY="your-key-here"
+# 2. Load this config: configs = ConfigLoader.from_yaml("openai_only.yaml")
+# 3. Use specific models:
+#    - manager.get_chat_model("gpt4") for complex reasoning
+#    - manager.get_chat_model("gpt35") for general tasks
+#    - manager.get_chat_model("gpt4_conservative") for factual responses
+#    - manager.get_chat_model("gpt35_creative") for creative writing

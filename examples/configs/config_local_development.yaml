@@ -1,0 +1,56 @@
+# Local Development Configuration
+# This configuration is designed for local development with minimal external dependencies
+
+providers:
+  # Primary local model for development
+  ollama_main:
+    provider: "ollama"
+    model_name: "llama2"
+    base_url: "http://localhost:11434"
+    temperature: 0.7
+    max_tokens: 1500
+  
+  # Alternative local model for comparison
+  ollama_code:
+    provider: "ollama" 
+    model_name: "codellama"
+    base_url: "http://localhost:11434"
+    temperature: 0.3
+    max_tokens: 2000
+  
+  # Small model for quick testing
+  ollama_small:
+    provider: "ollama"
+    model_name: "tinyllama"
+    base_url: "http://localhost:11434"
+    temperature: 0.8
+    max_tokens: 500
+  
+  # OpenAI as fallback (requires API key)
+  openai_backup:
+    provider: "openai"
+    model_name: "gpt-3.5-turbo"
+    api_key: "${OPENAI_API_KEY}"
+    temperature: 0.7
+    max_tokens: 1000
+
+# Setup Instructions:
+# 1. Install Ollama: https://ollama.ai/
+# 2. Pull models:
+#    - ollama pull llama2
+#    - ollama pull codellama
+#    - ollama pull tinyllama
+# 3. Start Ollama server: ollama serve
+# 4. (Optional) Set OPENAI_API_KEY for fallback
+
+# Development Workflow:
+# - Use 'ollama_main' for general development and testing
+# - Use 'ollama_code' for code generation and analysis
+# - Use 'ollama_small' for quick iterations and debugging
+# - Use 'openai_backup' when local models are insufficient
+
+# Benefits:
+# - No API costs for local development
+# - Works offline
+# - Fast iteration cycles
+# - Privacy-preserving (no data sent to external APIs)

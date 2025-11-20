@@ -1,0 +1,148 @@
+# CrewAI Workflow Configuration Example
+# This file demonstrates how to configure a multi-agent research and writing crew
+
+agents:
+  researcher:
+    name: researcher
+    role: Senior Research Analyst
+    goal: Uncover cutting-edge developments in AI and provide comprehensive analysis
+    backstory: |
+      You are a seasoned researcher with a knack for uncovering the latest 
+      developments in AI. Known for your ability to find the most relevant 
+      information and present it in a clear and concise manner.
+    provider: openai
+    memory: true
+    verbose: true
+    allow_delegation: false
+    tools:
+      - search_tool
+      - web_scraper
+    metadata:
+      experience_level: senior
+      expertise: AI research
+
+  writer:
+    name: writer
+    role: Technical Content Writer
+    goal: Create well-structured, engaging technical articles about AI
+    backstory: |
+      You're a meticulous technical writer with expertise in making complex 
+      AI concepts accessible. Your articles are known for being both 
+      technically accurate and easy to understand for a general audience.
+    provider: openai
+    memory: true
+    verbose: true
+    allow_delegation: false
+    tools:
+      - content_formatter
+      - citation_manager
+    metadata:
+      experience_level: expert
+      specialty: technical writing
+
+  editor:
+    name: editor
+    role: Editorial Director
+    goal: Ensure content quality and consistency across all publications
+    backstory: |
+      An experienced editorial director with 15 years of experience in 
+      technical publishing. You have an eye for detail and a passion for 
+      high-quality content.
+    provider: openai
+    memory: true
+    verbose: true
+    allow_delegation: true
+    metadata:
+      experience_level: director
+      focus: quality assurance
+
+tasks:
+  research_task:
+    name: research_task
+    description: |
+      Research the latest developments in AI and machine learning.
+      Focus on:
+      - Recent breakthroughs in LLMs
+      - New frameworks and libraries
+      - Industry applications
+      - Emerging trends
+    expected_output: |
+      A comprehensive research report with:
+      - Key developments (minimum 5)
+      - Recent papers and publications
+      - Industry adoption trends
+      - Future predictions
+    agent_name: researcher
+    async_execution: false
+    markdown: true
+    metadata:
+      priority: high
+      deadline_days: 2
+
+  writing_task:
+    name: writing_task
+    description: |
+      Based on the research findings, write a comprehensive article about 
+      the latest AI developments. Make it engaging for technical audiences 
+      while remaining accessible to general readers.
+    expected_output: |
+      A well-structured article (1500-2000 words) including:
+      - Introduction with context
+      - 3-4 main sections with detailed analysis
+      - Technical insights and examples
+      - Conclusion and future implications
+      - Properly formatted with headers and emphasis
+    agent_name: writer
+    async_execution: false
+    markdown: true
+    context_tasks:
+      - research_task
+    metadata:
+      target_audience: mixed technical
+      word_count: 1500
+      format: markdown
+
+  editing_task:
+    name: editing_task
+    description: |
+      Review and edit the article for:
+      - Clarity and readability
+      - Technical accuracy
+      - Consistency with publication standards
+      - Proper citation of sources
+    expected_output: |
+      An edited and polished article ready for publication with:
+      - Final review notes
+      - Suggested improvements
+      - Fact-checked claims
+      - Proper formatting
+    agent_name: editor
+    async_execution: false
+    markdown: true
+    human_input: true
+    context_tasks:
+      - writing_task
+    metadata:
+      review_level: comprehensive
+      requires_approval: true
+
+crews:
+  content_creation_crew:
+    name: content_creation_crew
+    description: Multi-agent crew for research, writing, and editing content
+    agents:
+      - researcher
+      - writer
+      - editor
+    tasks:
+      - research_task
+      - writing_task
+      - editing_task
+    process: sequential
+    verbose: true
+    memory: true
+    cache: true
+    metadata:
+      project: ai_content_hub
+      version: "1.0"
+      created_date: "2025-01-01"

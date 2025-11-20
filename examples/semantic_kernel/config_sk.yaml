@@ -1,0 +1,204 @@
+# Semantic Kernel Configuration Example
+
+# Provider configurations
+providers:
+  gpt4:
+    provider: openai
+    model_name: gpt-4
+    api_key: ${OPENAI_API_KEY}
+    temperature: 0.7
+    max_tokens: 1000
+  
+  gpt35:
+    provider: openai
+    model_name: gpt-3.5-turbo
+    api_key: ${OPENAI_API_KEY}
+    temperature: 0.5
+    max_tokens: 500
+  
+  azure_gpt4:
+    provider: azure
+    model_name: gpt-4
+    api_key: ${AZURE_OPENAI_KEY}
+    azure_endpoint: ${AZURE_OPENAI_ENDPOINT}
+    azure_deployment: gpt-4
+    api_version: 2024-02-15-preview
+    temperature: 0.7
+
+# Semantic Kernel-specific configuration
+semantic_kernel:
+  # Kernel configurations
+  kernels:
+    main:
+      provider_name: gpt4
+      id: main_kernel
+    
+    fast:
+      provider_name: gpt35
+      id: fast_kernel
+    
+    azure:
+      provider_name: azure_gpt4
+      id: azure_kernel
+  
+  # Plugin configurations
+  plugins:
+    text_processing:
+      name: text_processing
+      description: Text manipulation and analysis
+      functions:
+        - summarize
+        - translate
+        - extract_keywords
+    
+    content_generation:
+      name: content_generation
+      description: Generate various types of content
+      functions:
+        - write_blog_post
+        - create_title
+        - generate_outline
+    
+    data_analysis:
+      name: data_analysis
+      description: Analyze and interpret data
+      functions:
+        - analyze_trends
+        - generate_insights
+  
+  # Function configurations
+  functions:
+    # Semantic functions
+    summarize:
+      name: summarize
+      type: semantic
+      plugin_name: text_processing
+      prompt: |
+        Summarize the following text in {{$max_sentences}} sentences:
+        
+        {{$text}}
+      description: Summarizes text to specified length
+      max_tokens: 200
+      temperature: 0.5
+    
+    translate:
+      name: translate
+      type: semantic
+      plugin_name: text_processing
+      prompt: |
+        Translate the following text to {{$target_language}}:
+        
+        {{$text}}
+      description: Translates text to target language
+      max_tokens: 500
+      temperature: 0.3
+    
+    extract_keywords:
+      name: extract_keywords
+      type: semantic
+      plugin_name: text_processing
+      prompt: |
+        Extract the main keywords from this text:
+        
+        {{$text}}
+        
+        Provide 5-10 keywords as a comma-separated list.
+      description: Extracts keywords from text
+      max_tokens: 100
+      temperature: 0.3
+    
+    write_blog_post:
+      name: write_blog_post
+      type: semantic
+      plugin_name: content_generation
+      prompt: |
+        Write a {{$word_count}}-word blog post about {{$topic}}.
+        
+        Style: {{$style}}
+        Audience: {{$audience}}
+      description: Writes blog posts on specified topics
+      max_tokens: 1000
+      temperature: 0.8
+    
+    create_title:
+      name: create_title
+      type: semantic
+      plugin_name: content_generation
+      prompt: |
+        Create an engaging title for an article about {{$topic}}.
+        
+        Style: {{$style}}
+      description: Creates article titles
+      max_tokens: 50
+      temperature: 0.8
+    
+    generate_outline:
+      name: generate_outline
+      type: semantic
+      plugin_name: content_generation
+      prompt: |
+        Create a detailed outline for a document about {{$topic}}.
+        
+        Include {{$sections}} main sections with sub-points.
+      description: Generates document outlines
+      max_tokens: 300
+      temperature: 0.7
+    
+    analyze_trends:
+      name: analyze_trends
+      type: semantic
+      plugin_name: data_analysis
+      prompt: |
+        Analyze the following data and identify key trends:
+        
+        {{$data}}
+        
+        Provide insights and patterns.
+      description: Analyzes data for trends
+      max_tokens: 400
+      temperature: 0.5
+    
+    generate_insights:
+      name: generate_insights
+      type: semantic
+      plugin_name: data_analysis
+      prompt: |
+        Based on this information, generate actionable insights:
+        
+        {{$information}}
+      description: Generates actionable insights
+      max_tokens: 300
+      temperature: 0.6
+    
+    # Native functions (references to Python code)
+    # These would be defined in code and added to plugins
+    format_output:
+      name: format_output
+      type: native
+      plugin_name: formatting
+      description: Formats output for display
+    
+    validate_input:
+      name: validate_input
+      type: native
+      plugin_name: validation
+      description: Validates user input
+    
+    calculate_score:
+      name: calculate_score
+      type: native
+      plugin_name: analytics
+      description: Calculates quality score
+  
+  # Execution settings
+  settings:
+    default_max_tokens: 500
+    default_temperature: 0.7
+    timeout: 30
+    retry_attempts: 3
+    
+  # Planner settings (for advanced scenarios)
+  planner:
+    enabled: false
+    type: sequential
+    max_iterations: 10

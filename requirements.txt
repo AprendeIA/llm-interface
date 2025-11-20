@@ -1,0 +1,9 @@
+langgraph>=0.1.0
+pydantic>=2.0.0
+langchain-community>=0.0.1
+langchain-ollama>=0.0.1
+langchain-core>=0.1.0
+langchain-openai>=0.1.0
+langchain-anthropic>=0.1.0
+PyYAML>=6.0
+setuptools>=40.0.0

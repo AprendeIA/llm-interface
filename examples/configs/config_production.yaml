@@ -1,0 +1,78 @@
+# Production Configuration
+# This configuration is optimized for production deployments with reliability and performance
+
+providers:
+  # Primary production model
+  production_primary:
+    provider: "azure"
+    model_name: "gpt-4"
+    api_key: "${AZURE_OPENAI_API_KEY}"
+    azure_endpoint: "${AZURE_OPENAI_ENDPOINT}"
+    azure_deployment: "gpt-4-production"
+    azure_api_version: "2023-12-01-preview"
+    temperature: 0.6
+    max_tokens: 1500
+  
+  # Secondary production model for load balancing
+  production_secondary:
+    provider: "azure"
+    model_name: "gpt-4"
+    api_key: "${AZURE_OPENAI_API_KEY_SECONDARY}"
+    azure_endpoint: "${AZURE_OPENAI_ENDPOINT_SECONDARY}"
+    azure_deployment: "gpt-4-production-2"
+    azure_api_version: "2023-12-01-preview"
+    temperature: 0.6
+    max_tokens: 1500
+  
+  # Fast model for simple tasks
+  production_fast:
+    provider: "azure"
+    model_name: "gpt-35-turbo"
+    api_key: "${AZURE_OPENAI_API_KEY}"
+    azure_endpoint: "${AZURE_OPENAI_ENDPOINT}"
+    azure_deployment: "gpt-35-turbo-production"
+    azure_api_version: "2023-12-01-preview"
+    temperature: 0.7
+    max_tokens: 1000
+  
+  # External fallback
+  fallback_openai:
+    provider: "openai"
+    model_name: "gpt-4"
+    api_key: "${OPENAI_API_KEY_FALLBACK}"
+    temperature: 0.6
+    max_tokens: 1500
+  
+  # Emergency fallback
+  emergency_fallback:
+    provider: "openai"
+    model_name: "gpt-3.5-turbo"
+    api_key: "${OPENAI_API_KEY_FALLBACK}"
+    temperature: 0.7
+    max_tokens: 1000
+
+# Required Environment Variables:
+# Primary Azure Instance:
+# - AZURE_OPENAI_API_KEY: Primary Azure OpenAI API key
+# - AZURE_OPENAI_ENDPOINT: Primary Azure OpenAI endpoint
+# 
+# Secondary Azure Instance (for redundancy):
+# - AZURE_OPENAI_API_KEY_SECONDARY: Secondary Azure OpenAI API key
+# - AZURE_OPENAI_ENDPOINT_SECONDARY: Secondary Azure OpenAI endpoint
+#
+# Fallback:
+# - OPENAI_API_KEY_FALLBACK: OpenAI API key for fallback scenarios
+
+# Production Usage Pattern:
+# 1. Primary: production_primary (80% of traffic)
+# 2. Secondary: production_secondary (load balancing, failover)
+# 3. Fast: production_fast (simple operations, high throughput)
+# 4. Fallback: fallback_openai (when Azure is unavailable)
+# 5. Emergency: emergency_fallback (last resort)
+
+# Deployment Considerations:
+# - Use Azure for enterprise compliance and reliability
+# - Implement circuit breakers between providers
+# - Monitor usage and costs across all providers
+# - Set up alerts for failover scenarios
+# - Configure rate limiting and retry logic

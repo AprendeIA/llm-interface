@@ -1,0 +1,59 @@
+# Multi-Provider Configuration
+# This configuration demonstrates using multiple providers for different tasks
+
+providers:
+  # OpenAI for general-purpose tasks
+  openai_primary:
+    provider: "openai"
+    model_name: "gpt-4"
+    api_key: "${OPENAI_API_KEY}"
+    temperature: 0.7
+    max_tokens: 2000
+  
+  # Azure OpenAI for enterprise workloads
+  azure_enterprise:
+    provider: "azure"
+    model_name: "gpt-4"
+    api_key: "${AZURE_OPENAI_API_KEY}"
+    azure_endpoint: "${AZURE_OPENAI_ENDPOINT}"
+    azure_deployment: "gpt-4-deployment"
+    azure_api_version: "2023-12-01-preview"
+    temperature: 0.6
+    max_tokens: 1500
+  
+  # Anthropic Claude for analytical tasks
+  claude_analyst:
+    provider: "anthropic"
+    model_name: "claude-3-sonnet-20240229"
+    api_key: "${ANTHROPIC_API_KEY}"
+    temperature: 0.5
+    max_tokens: 2000
+  
+  # Local Ollama for privacy-sensitive tasks
+  local_llama:
+    provider: "ollama"
+    model_name: "llama2"
+    base_url: "http://localhost:11434"
+    temperature: 0.8
+    max_tokens: 1000
+  
+  # Fallback OpenAI for when primary fails
+  openai_fallback:
+    provider: "openai"
+    model_name: "gpt-3.5-turbo"
+    api_key: "${OPENAI_API_KEY}"
+    temperature: 0.7
+    max_tokens: 1000
+
+# Environment Variables Required:
+# - OPENAI_API_KEY: Your OpenAI API key
+# - AZURE_OPENAI_API_KEY: Your Azure OpenAI API key
+# - AZURE_OPENAI_ENDPOINT: Your Azure OpenAI endpoint URL
+# - ANTHROPIC_API_KEY: Your Anthropic API key
+
+# Usage Pattern:
+# - Use 'openai_primary' for creative writing and complex reasoning
+# - Use 'azure_enterprise' for business applications with compliance needs
+# - Use 'claude_analyst' for detailed analysis and research tasks
+# - Use 'local_llama' for private/sensitive data processing
+# - Use 'openai_fallback' as backup when other providers are unavailable

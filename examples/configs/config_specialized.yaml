@@ -1,0 +1,122 @@
+# Specialized Use Cases Configuration
+# This configuration demonstrates specialized configurations for specific tasks
+
+providers:
+  # Creative Writing - High temperature, long outputs
+  creative_writer:
+    provider: "openai"
+    model_name: "gpt-4"
+    api_key: "${OPENAI_API_KEY}"
+    temperature: 1.2
+    max_tokens: 3000
+  
+  # Code Generation - Low temperature, structured output
+  code_generator:
+    provider: "openai"
+    model_name: "gpt-4"
+    api_key: "${OPENAI_API_KEY}"
+    temperature: 0.2
+    max_tokens: 2000
+  
+  # Data Analysis - Anthropic Claude for reasoning
+  data_analyst:
+    provider: "anthropic"
+    model_name: "claude-3-sonnet-20240229"
+    api_key: "${ANTHROPIC_API_KEY}"
+    temperature: 0.3
+    max_tokens: 2500
+  
+  # Summarization - Fast and efficient
+  summarizer:
+    provider: "openai"
+    model_name: "gpt-3.5-turbo"
+    api_key: "${OPENAI_API_KEY}"
+    temperature: 0.4
+    max_tokens: 500
+  
+  # Translation - Conservative settings
+  translator:
+    provider: "openai"
+    model_name: "gpt-4"
+    api_key: "${OPENAI_API_KEY}"
+    temperature: 0.1
+    max_tokens: 1000
+  
+  # Embeddings for RAG
+  embeddings_provider:
+    provider: "openai"
+    model_name: "text-embedding-3-large"
+    api_key: "${OPENAI_API_KEY}"
+    temperature: 0.0
+    max_tokens: 8192
+  
+  # Local processing for sensitive data
+  privacy_focused:
+    provider: "ollama"
+    model_name: "llama2"
+    base_url: "http://localhost:11434"
+    temperature: 0.5
+    max_tokens: 1500
+
+# Task-Specific Usage:
+# 
+# Creative Writing (creative_writer):
+# - Blog posts, stories, marketing copy
+# - High temperature for creativity
+# - Long token limit for detailed content
+#
+# Code Generation (code_generator):
+# - Programming assistance, code review
+# - Low temperature for accuracy
+# - Structured, deterministic output
+#
+# Data Analysis (data_analyst):
+# - Research, analysis, fact-checking
+# - Claude's reasoning capabilities
+# - Moderate temperature for balanced output
+#
+# Summarization (summarizer):
+# - Document summaries, meeting notes
+# - Fast GPT-3.5 for efficiency
+# - Short token limit for concise output
+#
+# Translation (translator):
+# - Language translation tasks
+# - Very low temperature for accuracy
+# - GPT-4 for nuanced understanding
+#
+# Embeddings (embeddings_provider):
+# - Vector search, similarity matching
+# - RAG (Retrieval Augmented Generation)
+# - Semantic search applications
+#
+# Privacy-Focused (privacy_focused):
+# - Sensitive data processing
+# - Local inference only
+# - No data sent to external APIs
+
+# Example Usage Code:
+# ```python
+# from llm_interface import ConfigLoader, LLMManager
+# 
+# # Load specialized configurations
+# configs = ConfigLoader.from_yaml("config_specialized.yaml")
+# manager = LLMManager()
+# 
+# for name, config in configs.items():
+#     manager.add_provider(name, config)
+# 
+# # Use for specific tasks
+# creative_model = manager.get_chat_model("creative_writer")
+# code_model = manager.get_chat_model("code_generator")
+# analyst_model = manager.get_chat_model("data_analyst")
+# 
+# # Generate creative content
+# story = creative_model.invoke("Write a short story about AI")
+# 
+# # Generate code
+# code = code_model.invoke("Create a Python function to sort a list")
+# 
+# # Analyze data
+# analysis = analyst_model.invoke("Analyze the trends in this dataset")
+# ```
